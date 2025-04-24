@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+    stages {
+        stage('Seed') {
+            steps {
+                sh "ls -la ${env.WORKSPACE}"
+                jobDsl (
+                    targets: [
+                        'job-dsl/seed.groovy'
+                        ].join('\n'),
+                        additionalParameters: [
+                            gitlabDomain: env.GITLAB_DOMAIN,
+                            gitlabJenkinsPipelinesPath: env.GITLAB_JENKINS_PIPELINES_PATH,
+                            gitlabDockerImagesPath: env.GITLAB_DOCKER_IMAGES_PATH,
+                            workspace: "${env.WORKSPACE}"
+
+                        ]
+                )
+            }
+        }
+    }
+}
